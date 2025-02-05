@@ -1,0 +1,54 @@
+<div class="input-container">
+  <mat-form-field
+    [appearance]="appearance()"
+    [ngClass]="className()"
+    [subscriptSizing]="subscriptSizing()"
+  >
+    <mat-label>{{ label() }}</mat-label>
+    @if(type() === 'number') {
+    <input
+      matInput
+      [formControl]="fieldCtrl()"
+      type="number"
+      [placeholder]="placeholder()"
+      [readonly]="readonly()"
+      [maxlength]="maxLength()"
+      [min]="min()"
+      [max]="max()"
+      (change)="onInputChange($event)"
+      (blur)="onBlur()"
+      [step]="step()"
+      (keyup)="onKeyUp()"
+      [name]="name()"
+      class="text-ellipsis overflow-hidden"
+    />
+    } @else {
+    <input
+      matInput
+      [formControl]="fieldCtrl()"
+      [type]="type()"
+      [placeholder]="placeholder()"
+      [readonly]="readonly()"
+      [maxlength]="maxLength()"
+      [min]="min()"
+      [max]="max()"
+      (change)="onInputChange($event)"
+      (blur)="onBlur()"
+      [step]="step()"
+      (keyup)="onKeyUp()"
+      [name]="name()"
+      class="text-ellipsis overflow-hidden"
+    />
+    }
+
+    <span matSuffix>
+      <ng-content select="[suffix]"></ng-content>
+    </span>
+
+    @if (hintText()) {
+    <mat-hint>{{ hintText() }}</mat-hint>
+    } @if (getErrorMessage()) {
+    <mat-error>{{ getErrorMessage() }}</mat-error>
+    }
+  </mat-form-field>
+</div>

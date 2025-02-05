@@ -1,0 +1,130 @@
+<div class="cd-select-container">
+  <mat-form-field
+    [appearance]="appearance()"
+    [class.hide-underline]="hideUnderline()"
+    [ngClass]="className"
+    [subscriptSizing]="subscriptSizing()"
+  >
+    <mat-label>{{ placeholder() }}</mat-label>
+    <input
+      #inputElement
+      matInput
+      type="text"
+      [placeholder]="placeholder()"
+      [formControl]="fieldCtrl"
+      [matAutocomplete]="inputAuto"
+      [readonly]="isReadOnly()"
+      [required]="isRequired()"
+      (keydown.escape)="onEscapeKeyDown($event)"
+      (keydown)="onKeyDown($event)"
+    />
+    @if ( isDefaultIcon() && ((!valueProperty() &&
+    selectedValue?.[defaultIconProperty()]) || (valueProperty() &&
+    selectedObject?.[defaultIconProperty()])) ) {
+    <mat-icon matSuffix [matTooltip]="defaultIconTooltip()">star</mat-icon>
+    } @if (!inputAuto.isOpen) {
+    <mat-icon matSuffix (click)="toggleDropdown()">arrow_drop_down</mat-icon>
+    } @if (inputAuto.isOpen) {
+    <mat-icon matSuffix (click)="toggleDropdown()">arrow_drop_up</mat-icon>
+    }
+    <mat-autocomplete
+      #inputAuto="matAutocomplete"
+      (optionSelected)="onOptionSelected($event)"
+      (opened)="onAutocompleteOpened()"
+      (closed)="onAutocompleteClosed()"
+      [displayWith]="displayTemplate"
+      [panelWidth]="panelWidth()"
+    >
+      @if (isGrouped()) { @for (group of filteredList$ | async; track group) {
+      <mat-optgroup
+        [label]="group[groupLabel()]"
+        [disabled]="group?.isDisabled"
+        [matTooltip]="group?.toolTip ?? ''"
+      >
+        @for (element of group[groupKey()]; track element) {
+        <mat-option
+          [value]="valueProperty() ? element[valueProperty()] : element"
+          [disabled]="element?.isDisabled"
+          [matTooltip]="element?.toolTip ?? ''"
+        >
+          @if (optionIconProperty() && element[optionIconProperty()]) {
+          <mat-icon class="mr-2.5" [ngClass]="optionIconClassName">{{
+            optionIconName()
+          }}</mat-icon>
+          }
+          {{ displayProperty() ? element[displayProperty()] : element }}
+        </mat-option>
+        }
+      </mat-optgroup>
+      } } @if (!isGrouped) { @for (element of filteredList$ | async; track
+      element) {
+      <mat-option
+        [value]="valueProperty() ? element[valueProperty()] : element"
+        [disabled]="element?.isDisabled"
+        [matTooltip]="element?.toolTip ?? ''"
+        class="{{ optionIconProperty() ? 'pl-2' : '' }}"
+      >
+        <ng-container
+          *ngTemplateOutlet="
+            itemTemplate() || defaultTemplate;
+            context: { $implicit: element }
+          "
+        ></ng-container>
+      </mat-option>
+      } } @if ((filteredList$ | async)?.length === 0 && showNoResultsFound()) {
+      <mat-option disabled>No Results Found</mat-option>
+      }
+    </mat-autocomplete>
+    @if (hintText()) {
+    <mat-hint>{{ hintText() }}</mat-hint>
+    } @if (fieldCtrl?.hasError(errorType) && errorText()) {
+    <mat-error>
+      {{ errorText() }}
+    </mat-error>
+    }
+  </mat-form-field>
+</div>
+<div class="cd-select-container">
+  <input style="position: absolute; top: -9999px" #dummyInput />
+</div>
+
+<!-- Default Template -->
+<ng-template #defaultTemplate let-element>
+  <span
+    [ngClass]="
+      iconPosition() === 'after' ? 'flex justify-between items-center' : ''
+    "
+  >
+    @if (optionIconProperty() && iconPosition() === 'before') { @if
+    (element[optionIconProperty()]) {
+    <mat-icon
+      [ngClass]="optionIconClassName + ' mr-2.5 mdc-list-item__primary-text'"
+      [matTooltip]="optionIconTooltip()"
+    >
+      {{ optionIconName() }}
+    </mat-icon>
+    } }
+
+    <span
+      [ngClass]="
+        optionIconProperty() &&
+        !element[optionIconProperty()] &&
+        iconPosition() === 'before'
+          ? 'pl-9 mdc-list-item__primary-text'
+          : 'mdc-list-item__primary-text'
+      "
+    >
+      {{ displayProperty() ? element[displayProperty()] : element }}
+    </span>
+
+    @if (optionIconProperty() && iconPosition() === 'after') { @if
+    (element[optionIconProperty()]) {
+    <mat-icon
+      class="mr-0 mdc-list-item__primary-text"
+      [matTooltip]="optionIconTooltip()"
+    >
+      {{ optionIconName() }}
+    </mat-icon>
+    } }
+  </span></ng-template
+>

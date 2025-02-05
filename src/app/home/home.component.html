@@ -1,0 +1,13 @@
+<form [formGroup]="modelForm">
+  <app-input
+    [fieldCtrl]="modelForm.get('inputControl')"
+    [label]="'Input Component'"
+  ></app-input>
+  <app-select
+    [fieldCtrl]="modelForm.get('selectControl')"
+    [dropdownList]="dropdownOptions"
+    [placeholder]="'Select Component'"
+    [displayProperty]="'label'"
+    [valueProperty]="'value'"
+  />
+</form>

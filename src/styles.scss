@@ -1,4 +1,97 @@
-/* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@include mat.core();
+
+// Define the theme object.
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$cyan-palette,
+      tertiary: mat.$orange-palette,
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
+
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$cyan-palette,
+      tertiary: mat.$orange-palette,
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
+
+.theme-dark {
+  @include mat.all-component-themes($dark-theme);
+}
+
+.theme-light {
+  @include mat.all-component-themes($light-theme);
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+// working
+// @use "@angular/material" as mat;
+
+// body {
+//   font-family: Roboto, "Helvetica Neue", sans-serif;
+//   margin: 0;
+//   height: 100%;
+
+//   @include mat.theme(
+//     (
+//       color: (
+//         theme-type: dark,
+//         primary: mat.$cyan-palette,
+//         tertiary: mat.$orange-palette,
+//       ),
+//       typography: Roboto,
+//       density: 0,
+//     )
+//   );
+// }
+
+// html {
+//   height: 100%;
+// }
+
+// @use "@angular/material" as mat;
+
+// body {
+//   color-scheme: dark;
+//   @include mat.theme(
+//     (
+//       primary: mat.$cyan-palette,
+//       tertiary: mat.$orange-palette,
+//       typography: Roboto,
+//       density: 0,
+//     )
+//   );
+// }
+// html,
+// body {
+//   height: 100%;
+// }
+// body {
+//   margin: 0;
+//   font-family: Roboto, "Helvetica Neue", sans-serif;
+// }
+
+// body.dark-mode {
+//   color-scheme: dark;
+// }
